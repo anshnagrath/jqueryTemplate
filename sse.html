@@ -1,0 +1,84 @@
+<lhtml>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="./sse.css" rel="stylesheet">
+      <title>Material Design Template</title>
+      <style>
+      select{
+          display: block !important;
+      }
+      </style>
+    </head>
+    <body>
+      <div class="ctrlqFormContentWrapper">
+          <div class="ctrlqHeaderMast">
+
+          </div>
+          <div class="ctrlqCenteredContent">
+                 
+              <div class="ctrlqFormCard">
+                  <div class="ctrlqAccent"></div>
+            <div class="ctrlqFormContent">
+              <form>  
+                  <div class="row">
+                        <a  id = "addItem" style="float:right;background: #009688 !important"class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                        <a   id = "removeItem" style="float:right;background: #009688 !important"class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">remove</i></a>
+                  <div class="input-field col s12">
+                    <h4>Quiz Questions</h4>
+                  </div>
+                </div>
+
+  
+                <div  id="firstRow" class="row" style="margin-bottom: 20px !important">
+                        <p>Total Number of Questions to be displayed: <input id="questionCount" type="number"style="width:150px"></p>
+                        <p>Session Id: <input id="sessionId" type="number" style="width:150px"> </p>
+                   <div class="input-field">
+                       <p style="margin-left:-26px;padding-top:9px;"> 1</p>
+                    <input id="email" name="question" type="text"   required>
+                    <label for="email">Your Questions</label>
+                    <div id="e2"></div>
+                    </div>
+                    
+                  <div style="float: right !important;display: block;" >
+                    <select >           
+                      <option value="1"  disabled selected>Choose Question type</option>
+                      <option value="radio">radio</option> 
+                      <option value="Checkbox">Checkbox</option>
+                      <option value="Mutiselect">Muti select</option>
+                    </select>
+                   
+                  </div>   
+                    <div class="input-field" style="width:55% !important ;margin-top: 0px" id="ops">
+                     <input class="firstOption" name='option1' type="text"  required>
+                     <label for="option">Option</label>
+                    </div>
+                   
+                </div>
+  
+
+                
+                
+                <div class="row">
+                  <div style="text-align: center" class="input-field">
+                    <button id="submitButton"  type="button"class="waves-effect waves-light btn-large"><i class="material-icons right">backup</i>Submit</button>
+                  </div>
+                </div>
+  
+              </form>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/additional-methods.min.js"></script>
+      <script src="./sse.js"></script>
+    </body>
+  
+    </html>
