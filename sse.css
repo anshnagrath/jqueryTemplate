@@ -6,6 +6,9 @@ body {
   form p {
     font-size: 120%;
   }
+  #toast-container {
+    float:right;  
+  }
   
   .ctrlqHeaderMast {
     height: 278px;

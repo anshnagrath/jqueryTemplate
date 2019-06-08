@@ -1,38 +1,46 @@
 var elementCounter = 1
 $(document).ready(function() {
-    console.log('ssssssssssssss')
-   
-  
-    
     $.validator.setDefaults({
       ignore: []
     });
-    //to a particular question row
-
     $("#addItem").click(function(){
-        elementCounter++;
-        var parentId = document.activeElement.parentElement.getElementsByTagName('p')[2].innerText;
-        $("#firstRow").append('<div><div  class="" style="margin-bottom: 20px !important"><div class="input-field"><p style="margin-left:-26px;padding-top:9px;">'+elementCounter+'</p> <input id="email" name="question" type="text"   required><label for="email" style="left:0px;">Your Questions</label><div id="e2"></div> </div><div style="float: right !important;" class="input-field"  > <select id="select"style="display:block;"> <option value="1"  disabled selected>Choose Question type</option><option value="radio">Radio</option> <option value="Checkbox">Checkbox</option><option value="Mutiselect">Muti select</option>     </select></div>    <div class="input-field" style="width:55% !important ;margin-top: 0px" id="options"> <input class="firstOption" name="option'+parentId+'" id="ops" onkeypress="EnterEvent(event)" type="text"  required> <label for="option">Option</label></div></div>')
-    });
-
-    
+      var lastQuestionInputLength = document.getElementsByClassName('content')[elementCounter-1].getElementsByTagName('input')[0].value.length;
+      console.log(lastQuestionInputLength)
+      //    var parentInputLength =document.
+      if(lastQuestionInputLength>0){
+      elementCounter++;
+      $(".firstRow").append('<div class="content"><div  class="" style="margin-bottom: 20px !important"><div class="input-field"><p style="margin-left:-26px;padding-top:9px;">'+elementCounter+'</p> <input id="email" name="question" type="text"   required><label for="email" style="left:0px;">Your Questions</label><div id="e2"></div> </div><div style="float: right !important;" class="input-field"  > <select id="select"style="display:block;"> <option value="1"  disabled selected>Choose Question type</option><option value="radio">Radio</option> <option value="Checkbox">Checkbox</option><option value="Mutiselect">Muti select</option>     </select></div>    <div class="input-field" style="width:55% !important ;margin-top: 0px" id="options"> <input class="firstOption" name="option'+elementCounter+'" id="ops" onkeypress="EnterEvent(event)" type="text"  required> <label for="option">Option</label></div></div>')
+     }else{
+      M.toast({html: 'Please fill the previous details and then proceed'})
+     }
+     });
     //to remove question row
     $("#removeItem").click(function(e){
-    if($("#firstRow > div").length > 3 ){
-        $("#firstRow > div").last().remove()
+    if( document.getElementsByClassName('content').length > 1 ){
+         elementCounter--;
+      //  $(".firstRow > div").last().remove()
+        document.getElementsByClassName('content')[document.getElementsByClassName('content').length - 1].remove();
     }
     })
     //to add a option on enter
-    // $("#ops").focus(function(){
-        console.log("infocus")
+
     $("#ops").last().on('keypress',function(e){
-        var parentId = document.activeElement.parentElement.parentElement.getElementsByTagName('p')[2].innerText;
-        console.log(e,'eeeffff')
-        if(e.which == 13) {
-           $("#ops").append('<input  name="option'+parentId+'" type="text" on id="ops" required> <label for="email">Option</label>')
-        }
-      });
-    // })
+        var parentId = document.activeElement.parentElement.parentElement.getElementsByTagName('p')[0].innerText;
+         
+       setTimeout(()=>{ 
+        if(e.which == 13 && document.activeElement.value.length>0 && document.getElementById('email').value.length>1) {
+          console.log(document.activeElement.value,'eessszeffff') 
+          $("#ops").append('<input  name="option'+parentId+'" type="text" on id="ops" required> <label for="email">Option</label>')
+         }
+         else if(document.activeElement.value.length ==0 && e.which == 13 &&  document.getElementById('email').value.length==0 || document.getElementById('email').value.length==0 && e.which == 13 ){
+         M.toast({html: 'Please fill the previous details and then proceed'})
+       }else if(document.activeElement.value.length ==0 && e.which == 13){
+        M.toast({html: 'Please fill the previous details and then proceed'})
+       }
+    
+          },100)      
+        });
+
       //to get all the value from a particular form 
     
       $('#submitButton').click(function(){
@@ -40,6 +48,10 @@ $(document).ready(function() {
         var questionOptions = { }
         var questionsArray = [];
         var formArray = []
+
+        var optionsArray = []
+        var optionKey = '1';
+
         var datastring = $("form").serialize();
         var questionCount = $("#questionCount").val();
         var sessionID = $("#sessionId").val()
@@ -60,59 +72,52 @@ $(document).ready(function() {
                 questionsArray.push(question)
               }
           })
+          
           datastring.split('&').forEach((data,index)=>{
-              if(index==0){
-                  console.log(index,'abbbbbb')
-                  var QuestionArray=[];
+           // console.log(data,'ddddddsss')
+            if(data.includes('option') ){
+              if( data.includes(optionKey)){
+                optionKey = data.split('=')[0].split('option')[1]
+                var optionContent = data.split('=')[1]
+                console.log(data,optionsArray,optionContent,optionContent.toString().includes('+'),'keyyyyyyy')
+              if(optionContent.toString().includes('+')){
+                optionsArray.push(optionContent.split('+').join(' '))
               }
-             
-             var  optionnext= ''
-              if(data.includes('option')){
-                  var option =data.split('=')[0].split('option')[1];
-                  if(datastring.split('&')[index+1]){ 
-                     if(datastring.split('&')[index+1].includes('=')){
-
-                         optionnext=  datastring.split('&')[index+1].split('=')[0]
-                     }
-                     if(optionnext.includes('option')){
-                       optionnext =  optionnext.split('option')[1];
-                     }
+                else{
+                  optionsArray.push(optionContent)
                 }
-if(optionnext==''){
 
-    optionnext=option;
-}
-
-if(optionnext!=option){
-    console.log(optionnext,option,'condition') 
-                    QuestionArray=[]
-                  }else{
-                      var optionVAl= data.split('=')[1];
-                      console.log(data.split('='))
-                      QuestionArray.push(optionVAl);
-                      console.log(QuestionArray)
-                    
-                    }
-                    
-                    
-                    //  questionOptions[parseInt(data)] = data.split('=')[1]   
+            }
+            else{
+             // console.log(optionKey,optionsArray,questionOptions,'keyyyyyyy')
+              questionOptions[optionKey] = optionsArray
+              optionKey = data.split('=')[0].split('option')[1]
+              optionsArray = [];
+              if(optionContent.toString().includes('+')){
+                optionsArray.push(optionContent.split('+').join(' '))
+              }
+                else{
+                  optionsArray.push(optionContent)
                 }
-          //      questionOptions[option] =QuestionArray;
+             }
 
+            questionOptions[optionKey] = optionsArray
+
+          }
 
           })
-        console.log(datastring,questionOptions,questionsArray,questionCount,sessionID)
-        
-
       });
    
   });
 
   function EnterEvent(e){
-      console.log(e)
-    if(e.keyCode == 13) {
+      // console.log(e)
+    var parentInputLength =document.activeElement.parentElement.parentElement.getElementsByTagName('input')[0].value.length;
+    if(e.keyCode == 13 && document.activeElement.value.length>0 && parentInputLength>1) {
      var parentId = document.activeElement.parentElement.parentElement.getElementsByTagName('p')[0].innerText;
        console.log( document.activeElement)
-        $(document.activeElement.parentElement).append('<input  name="option'+parentId+'" type="text" onkeypress="EnterEvent(event)" id="ops" required> <label for="email">Option</label>')
+        $(document.activeElement.parentElement).append('<input class="firstOption" name="option'+parentId+'" type="text" onkeypress="EnterEvent(event)" id="ops" required> <label for="email">Option</label>')
+     }else if(e.keyCode == 13 && document.activeElement.value.length==0){
+      M.toast({html: 'Please fill the previous details and then proceed'})
      }
  }
