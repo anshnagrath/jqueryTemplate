@@ -1,4 +1,5 @@
 var elementCounter = 1
+var fromIcon = 'fromIcon'
 $(document).ready(function() {
     $.validator.setDefaults({
       ignore: []
@@ -9,7 +10,7 @@ $(document).ready(function() {
       //    var parentInputLength =document.
       if(lastQuestionInputLength>0){
       elementCounter++;
-      $(".firstRow").append('<div class="content"><div  class="" style="margin-bottom: 20px !important"><div class="input-field"><p style="margin-left:-26px;padding-top:9px;">'+elementCounter+'</p> <input id="email" name="question" type="text" placeholder="Option"  required><div id="e2"></div> </div><div style="float: right !important;" class="input-field"  > <select id="select"style="display:block;"> <option value="1"  disabled selected>Choose Question type</option><option value="radio">Radio</option> <option value="Checkbox">Checkbox</option><option value="Mutiselect">Muti select</option>     </select></div>    <div class="input-field" style="width:55% !important ;margin-top: 0px" id="options"> <input placeholder="CoorectAnswer" name="answer'+elementCounter+'" type="text"  required> <input class="firstOption" name="option'+elementCounter+'" id="ops" onkeypress="EnterEvent(event)" type="text" placeholder="Option" required>    <i style="float:right;bottom:53px;left:10px;position:relative" class="material-icons">add_circle</i></a> <i style="float:right;margin-top:-53px;left:10px" class="material-icons">remove_circle</i></a></div></div>')
+      $(".firstRow").append('<div class="content"><div  class="" style="margin-bottom: 20px !important"><div class="input-field"><p style="margin-left:-26px;padding-top:9px;">'+elementCounter+'</p> <input id="email" name="question" type="text" placeholder="Option"  required><div id="e2"></div> </div><div style="float: right !important;" class="input-field"  > <select id="select"style="display:block;"> <option value="1"  disabled selected>Choose Question type</option><option value="radio">Radio</option> <option value="Checkbox">Checkbox</option><option value="Mutiselect">Muti select</option>     </select></div>    <div class="input-field" style="width:55% !important ;margin-top: 0px" id="options"> <input placeholder="CoorectAnswer" name="answer'+elementCounter+'" type="text"  required> <input class="firstOption" name="option'+elementCounter+'" id="ops" onkeypress="EnterEvent(event)" type="text" placeholder="Option" required>    <i style="float:right;bottom:53px;left:10px;position:relative" onClick="EnterEvent('+fromIcon+')" class="material-icons addElement">add_circle</i></a> <i style="float:right;margin-top:-53px;left:10px" class="material-icons"  onClick="removeOptions()">remove_circle</i></a></div></div>')
      }else{
       M.toast({html: 'Please fill the previous details and then proceed'})
      }
@@ -30,7 +31,7 @@ $(document).ready(function() {
          console.log( document.activeElement.value.length)
         if(e.which == 13 && document.activeElement.value.length>0 && document.getElementById('email').value.length>0) {
           console.log(document.activeElement.value,'eessszeffff') 
-          $("#ops").append('<input  name="option'+parentId+'" type="text" on id="ops" placeholder="Option" required>    <i style="float:right;bottom:53px;left:10px;position:relative" class="material-icons">add_circle</i></a>  <i style="float:right;margin-top:-53px;left:10px" class="material-icons">remove_circle</i></a> ')
+          $("#ops").append('<input  name="option'+parentId+'" type="text" on id="ops" placeholder="Option" required>    <i style="float:right;bottom:53px;left:10px;position:relative" class="material-icons addElement"  onClick="EnterEvent('+fromIcon+')">add_circle</i></a>  <i style="float:right;margin-top:-53px;left:10px"  onClick="removeOptions()" class="material-icons">remove_circle</i></a> ')
          }
          else if(document.activeElement.value.length ==0 && e.which == 13 &&  document.getElementById('email').value && document.getElementById('email').value.length==0 ||document.getElementById('email').value &&  document.getElementById('email').value.length==0 && e.which == 13 ){
          M.toast({html: 'Please fill the previous details and then proceed'})
@@ -107,17 +108,37 @@ $(document).ready(function() {
 
           })
       });
+      $('.addElement').click(function(e) {
+       var parentId = $(this).parent().parent().find('p')[0].innerText
+        $(this).parent().append("<input class='firstOption' placeholder='Option' name='option"+parentId+"' type='text' onkeypress='EnterEvent(event)' id='ops' required>    <i style='float:right;bottom:53px;left:10px;position:relative' class='material-icons addElement' onClick = 'EnterEvent("+fromIcon+")'>add_circle</i></a> <i style='float:right;margin-top:-53px;left:10px'class='material-icons' onClick='removeOptions()'>remove_circle</i></a>")    
+       });
+     
    
   });
 
   function EnterEvent(e){
-      // console.log(e)
+   // console.log(e)
+     if(e.keyCode ==13) {
     var parentInputLength =document.activeElement.parentElement.parentElement.getElementsByTagName('input')[0].value.length;
     if(e.keyCode == 13 && document.activeElement.value.length>0 && parentInputLength>0) {
      var parentId = document.activeElement.parentElement.parentElement.getElementsByTagName('p')[0].innerText;
        console.log( document.activeElement)
-        $(document.activeElement.parentElement).append('<input class="firstOption" placeholder="Option" name="option'+parentId+'" type="text" onkeypress="EnterEvent(event)" id="ops" required>    <i style="float:right;bottom:53px;left:10px;position:relative" class="material-icons">add_circle</i></a> <i style="float:right;margin-top:-53px;left:10px" class="material-icons">remove_circle</i></a>')
+        $(document.activeElement.parentElement).append('<input class="firstOption" placeholder="Option" name="option'+parentId+'" type="text" onkeypress="EnterEvent(event)" id="ops" required>    <i style="float:right;bottom:53px;left:10px;position:relative" onClick="EnterEvent('+fromIcon+')" class="material-icons addElement">add_circle</i></a> <i style="float:right;margin-top:-53px;left:10px"  onClick="removeOptions()" class="material-icons">remove_circle</i></a>')
      }else if(e.keyCode == 13 && document.activeElement.value.length==0){
       M.toast({html: 'Please fill the previous details and then proceed'})
+     } 
+    }else if(e=='fromIcon'){
+      $('.addElement').click(function(event){
+    // console.log($(this).parent())
+    var parentId =  $(this).parent().parent().find('p')[0].innerText;
+   $(this).parent().append("<input class='firstOption' placeholder='Option' name='option"+parentId+"' type='text' onkeypress='EnterEvent(event)' id='ops' required>    <i style='float:right;bottom:53px;left:10px;position:relative' class='material-icons addElement' onClick = 'EnterEvent("+fromIcon+")'>add_circle</i></a> <i style='float:right;margin-top:-53px;left:10px' onClick='removeOptions()' class='material-icons'>remove_circle</i></a>")    
+    event.stopImmediatePropagation();
+      })
+     
+     
      }
+ }
+ function removeOptions(){
+
+
  }
